@@ -3,7 +3,7 @@ This repository archives the code I wrote, implementation details, and my though
 ## zicio_notify.h, zicio_data_buffer_descriptor.c
 
 Originally, zicIO was designed targeting PostgreSQL's sequential scan. Then it was later extended to support various columnar analytical systems, leading to some changes. PostgreSQL's sequential scan allows reading the entire file in any order, and zicIO was initially designed based on this assumption. But columnar analytical systems often read only specific parts of a file and order of reads is important. So new call paths and APIs were introduced, which are prefixed with 
-***zicio_notify***. This naming reflects the concept that the user notifies zicIO of the regions and order to read.
+*zicio_notify*. This naming reflects the concept that the user notifies zicIO of the regions and order to read.
 
 The main change in *zicio_notify* was the process of generating NVMe commands. Creating an NVMe command requires a physical block address, which means an *ext4_extent* is needed when using the ext4 file system. If the read order is not important, the process is simple, as any part of the file can be read into any location in the buffer. But when the read order becomes important, it turns into a more complex problem. There may be no consistent reading pattern, as it varies by file format and differs for each query. Then how can we search for the specific ext4_extent?
 

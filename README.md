@@ -31,7 +31,7 @@ The updated EMA for the device's I/O latency, combined with the user's current c
 
 When the interrupt handler determines that additional *requests* are needed for zicIO, it registers a callback function to wake up the softirq daemon process using timer softirq functions. Then the softirq daemon process wakes up, its main function starts getting new *requests* for zicIO and triggers new I/O. Obtaining new *requests* is performed specifically by the softirq daemon, not by all softirq contexts.
 
-Simply registering a callback function to acquire *requests* with the softirq can lead to issues because a softirq callback is not exclusively executed by the softirq daemon process. Instead, it may be invoked in various unexpected contexts, such as immediately after interrupt handling. If *requests* are not obtained in the process context, unexpected kernel panics may occur.
+Simply registering a callback function to acquire *requests* with the softirq can lead to issues because a softirq callback is not exclusively executed by the softirq daemon process. Instead, it may be invoked in various unexpected contexts, such as immediately after interrupt handling. If the new *requests* are not obtained in the process context, unexpected kernel panics may occur.
 
 Note that directly modifying softirq's main function is not an appropriate implementation. By the time the implementation had progressed significantly, I became aware of various mechanisms in linux for defering tasks to run in the process context, such as work_queue. Since zicIO was already implemented using softirq, it wasn’t changed.
 

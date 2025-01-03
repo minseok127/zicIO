@@ -33,7 +33,7 @@ When the interrupt handler determines that additional *requests* are needed for 
 
 Note that acquiring *request* is performed specifically by the softirq daemon, not by all softirq contexts. Simply registering a callback function to acquire *requests* with the softirq can lead to issues. This is because a callback function for a softirq is not exclusively executed by the softirq daemon process. Instead, it can be invoked in various unexpected contexts, such as immediately after interrupt handling, etc. Obtaining *requests* must occur within the process context. If not, unpredictable kernel panics can occur.
 
-++ Directly modifying softirq's main function is not an appropriate implementation. By the time the implementation had progressed significantly, I became aware of various mechanisms in linux for defering tasks to run in the process context, such as work_queue. Therefore, directly modifying softirq's main function is not an appropriate implementation. Since zicIO was already implemented using softirq, it wasn’t changed.
+++ Directly modifying softirq's main function is not an appropriate implementation. By the time the implementation had progressed significantly, I became aware of various mechanisms in linux for defering tasks to run in the process context, such as work_queue. Since zicIO was already implemented using softirq, it wasn’t changed.
 
 If the I/O throughput exceeds the user's consumption throughput, *requests* need to be returned to the blk_mq layer. In such cases, no additional processing is required in the zicIO logic, and the flow proceeds to the default NVMe interrupt handler logic (bypassing zicIO's resubmission logic naturally returns the request to the blk_mq layer).
 

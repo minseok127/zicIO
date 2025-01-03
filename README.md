@@ -41,7 +41,7 @@ There’s some code here that’s implemented but not actually used right now. I
 
 ## zicio_nvme_cmd_timer_wheel.h, zicio_nvme_cmd_timer_wheel.c
 
-One might think that release timing could be unnecessary if it doesn't impact preparing data in a timely manner, particularly when constant I/O requests are required. However, I think I/O timing still has an importance for designing a I/O scheduling mechanism.
+One might think that release timing could be unnecessary if it doesn't impact preparing data in a timely manner, particularly when constant I/O requests are required. However, I think I/O timing still has an importance for designing an I/O scheduling mechanism.
 
 How should I/O requests from multiple users be scheduled? Is an I/O request less urgent when it's farther from the user's current reading point? But what if the user is very fast? Considering both the user's location and speed essentially means estimating when they will reach the data. In zicIO, this estimated time is used as the priority for scheduling I/O commands (longer times are assigned lower priority, while shorter times are assigned higher priority).
 

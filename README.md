@@ -37,7 +37,7 @@ Looking back, using softirq this way wasn’t necessary. By the time the impleme
 
 If the I/O throughput exceeds the user's consumption throughput, *requests* need to be returned to the blk_mq layer. In such cases, no additional processing is required in the zicIO logic, and the flow proceeds to the default NVMe interrupt handler logic (bypassing zicIO's resubmission logic naturally returns the request to the blk_mq layer).
 
-There’s some code here that’s implemented but not actually used right now. While I haven't reviewed all existing I/O techniques, I haven't found others that determine the number of parallel I/O requests based on user speed. So I believe the responsibility for deciding block device usage is left to users. Users, however, are unaware of how much others are using the device due to kernel virtualization. If the kernel could regulate device usage per user, it could enable fairer resource allocation. This idea was implemented as 'PBR' in the code but is no longer used as it is not closely related to the paper's rationale.
+There’s some code here that’s implemented but not actually used right now. I think the responsibility for deciding block device usage is still left to users in most typical I/O techniques. Users, however, are unaware of how much others are using the device due to kernel virtualization. If the kernel could regulate device usage per user, it could enable fairer resource allocation. This idea was implemented as 'PBR' in the code but is no longer used as it is not closely related to the paper's rationale.
 
 ## zicio_nvme_cmd_timer_wheel.h, zicio_nvme_cmd_timer_wheel.c
 

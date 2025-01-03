@@ -23,7 +23,7 @@ This design still has constraints. The process of populating the mapping table o
 
 ## zicio_flow_ctrl.h, zicio_flow_ctrl.c
 
-These files are related to the logic that controls how many I/O requests are issued in parallel. I think this has a stronger effect on achieving the goal of preparing data just in time compared to setting the release timing of I/O, as it is rare for users to be slower than a single I/O request (especially in highly optimized, high-performance DBMS, where I/O requests need to be issued continuously to keep up with data consumption).
+These files are related to the logic that controls how many I/O requests are issued in parallel. I think this has a stronger effect on achieving the goal of preparing data just in time compared to setting the release timing of I/O in some cases (especially in highly optimized, high-performance DBMS, where I/O requests need to be issued continuously to keep up with data consumption).
 
 In the NVMe interrupt handler, after ensuring I/O results are recognized by libzicio, zicIO updates the exponential moving average (EMA) for the I/O latency. EMA is used because it requires only the most recent latency value and the current EMA, without storing previous latencies.
 

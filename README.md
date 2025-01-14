@@ -1,6 +1,6 @@
 This repository archives the code I wrote, implementation details, and my thoughts about it. These are only partial codes, which cannot independently run the full system.
 
-# Generating NVMe commands
+## Generating NVMe commands
 
 ### Files: zicio_notify.h, zicio_data_buffer_descriptor.c
 
@@ -23,7 +23,7 @@ In summary, 8 bytes of compressed information can be used to create a single rea
 
 This design still has constraints. The process of populating the mapping table occurs during channel opening. So if the file system changes logical-to-physical mappings after channel opening, affected information will need to be updated. Memory usage also depends on how well the file system handles fragmentation, making the design's overheads and constraints closely tied to file system behavior. While it might be possible to periodically refill the mapping table with information for new I/O operations, this has not yet been implemented.
 
-# Managing NVMe usage
+## Managing NVMe usage
 
 ### Files: zicio_flow_ctrl.h, zicio_flow_ctrl.c
 
@@ -41,7 +41,7 @@ As an additional note about the implementation, using softirq in this manner is 
 
 There’s some code here that’s implemented but not actually used right now. I think the responsibility for deciding block device usage is still left to users in typical I/O techniques. Users, however, are unaware of how much others are using the device due to kernel virtualization. If the kernel could regulate device usage per user, it could enable fairer resource allocation. This idea was implemented as 'PBR' in the code but is no longer used as it is not closely related to the paper's rationale.
 
-# Scheduling NVMe commands
+## Scheduling NVMe commands
 
 ### Files: zicio_nvme_cmd_timer_wheel.h, zicio_nvme_cmd_timer_wheel.c
 

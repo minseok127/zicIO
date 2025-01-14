@@ -1,6 +1,8 @@
 This repository archives the code I wrote, implementation details, and my thoughts about it. These are only partial codes, which cannot independently run the full system.
 
-## zicio_notify.h, zicio_data_buffer_descriptor.c
+# Generating NVMe commands
+
+### Files: zicio_notify.h, zicio_data_buffer_descriptor.c
 
 Originally, zicIO was designed targeting PostgreSQL's sequential scan. Then it was later extended to support various columnar analytical systems, leading to some changes. PostgreSQL's sequential scan allows reading the entire file in any order, and zicIO was initially designed based on this assumption. But columnar analytical systems often read only specific parts of a file and order of reads is important. So new call paths and APIs were introduced, which are prefixed with 
 *zicio_notify*. This naming reflects the concept that the user notifies zicIO of the regions and order to read.
@@ -21,7 +23,9 @@ In summary, 8 bytes of compressed information can be used to create a single rea
 
 This design still has constraints. The process of populating the mapping table occurs during channel opening. So if the file system changes logical-to-physical mappings after channel opening, affected information will need to be updated. Memory usage also depends on how well the file system handles fragmentation, making the design's overheads and constraints closely tied to file system behavior. While it might be possible to periodically refill the mapping table with information for new I/O operations, this has not yet been implemented.
 
-## zicio_flow_ctrl.h, zicio_flow_ctrl.c
+# Managing NVMe usage
+
+### Files: zicio_flow_ctrl.h, zicio_flow_ctrl.c
 
 These files are related to the logic that controls how many I/O requests are issued in parallel. I think this has a stronger effect on preparing data in a timely manner, compared to setting the release timing of I/O (especially in highly optimized, high-performance DBMS, where I/O requests need to be issued continuously to keep up with data consumption).
 
@@ -37,7 +41,9 @@ As an additional note about the implementation, using softirq in this manner is 
 
 There’s some code here that’s implemented but not actually used right now. I think the responsibility for deciding block device usage is still left to users in typical I/O techniques. Users, however, are unaware of how much others are using the device due to kernel virtualization. If the kernel could regulate device usage per user, it could enable fairer resource allocation. This idea was implemented as 'PBR' in the code but is no longer used as it is not closely related to the paper's rationale.
 
-## zicio_nvme_cmd_timer_wheel.h, zicio_nvme_cmd_timer_wheel.c
+# Scheduling NVMe commands
+
+### Files: zicio_nvme_cmd_timer_wheel.h, zicio_nvme_cmd_timer_wheel.c
 
 One might think that release timing could be unnecessary if it doesn't impact preparing data in a timely manner, particularly when constant I/O requests are required. However, I think I/O timing still has an importance for designing an I/O scheduling mechanism.
 

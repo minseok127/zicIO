@@ -1,4 +1,4 @@
-This repository archives the code I wrote, implementation details, and my thoughts about it. These are only partial codes, which cannot independently run the full system.
+This repository archives the code I wrote, implementation details, and my thoughts about it. These are only partial codes, which cannot independently run the full system. The main entry point for the functions is the nvme_handle_cqe() in pci.c. This function is called by the NVMe interrupt handler, nvme_irq(). The pci.c is located in linux/drivers/nvme/host.
 
 ## Generating NVMe commands
 

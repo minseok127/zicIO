@@ -15,6 +15,10 @@ nvme_handle_cqe()
 |    |    |
 |    |    -- push the new I/O information to the I/O scheduler
 |    |    |
+|    |    -- if there are too many requests
+|    |    |    |
+|    |    |    -- return
+|    |    |
 |    |    -- pop the next I/O information from the I/O scheduler
 |    |    |
 |    |    -- if the next I/O information is fetched

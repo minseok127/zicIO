@@ -1,5 +1,37 @@
 This repository archives the code I wrote, implementation details, and my thoughts about it. These are only partial codes, which cannot independently run the full system. The main entry point is nvme_handle_cqe() in pci.c, which is called by the NVMe interrupt handler nvme_irq(). The pci.c file is located in linux/drivers/nvme/host.
 
+```
+nvme_handle_cqe()
+|
+-- if req->bio->zicio_enabled
+|    |
+|    -- zicio_notify_nvme_complete_command()
+|    |    |
+|    |    -- update I/O latency statistics
+|    |    |
+|    |    -- adjust nvme usage (number of request count)
+|    |    |
+|    |    -- inform libzicio of the I/O results
+|    |    |
+|    |    -- push the new I/O information to the I/O scheduler
+|    |    |
+|    |    -- pop the next I/O information from the I/O scheduler
+|    |    |
+|    |    -- if the next I/O information is fetched
+|    |        |
+|    |        -- replace nvme command into the next
+|    |
+|    -- if the nvme command has been replaced
+|        |
+|        -- setup dma information 
+|        |
+|        -- nvme_submit_cmd() /* resubmission */
+|        |
+|        -- return
+|
+-- nvme_complete_req()
+```
+
 ## Generating NVMe commands
 
 ### Files: zicio_notify.h, zicio_data_buffer_descriptor.c

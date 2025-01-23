@@ -13,7 +13,7 @@ nvme_handle_cqe()
 |    |    |
 |    |    -- inform libzicio of the I/O results
 |    |    |
-|    |    -- push the new I/O information to the I/O scheduler
+|    |    -- push the new I/O information into the I/O scheduler
 |    |    |
 |    |    -- if there are too many requests
 |    |    |    |

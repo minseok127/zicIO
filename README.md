@@ -81,7 +81,7 @@ There’s some code here that’s implemented but not actually used right now. I
 
 One might think that release timing could be unnecessary if it doesn't impact preparing data in a timely manner, particularly when continuous I/O requests are required. However, I think I/O timing still has an importance for designing an I/O scheduling mechanism.
 
-How should I/O requests from multiple users be scheduled? Is an I/O request less urgent when it's farther from the user's current reading point? But what if the user is very fast? Considering both the user's location and speed essentially means estimating when they will reach the data. In zicIO, this estimated time is used as the priority for scheduling I/O commands (longer times are assigned lower priority, while shorter times are assigned higher priority).
+How should I/O requests from multiple users be scheduled? If an I/O request is farther from the user, does it have a lower priority? But what if the user is very fast? Considering both the user's location and speed essentially means estimating when they will reach the data. In zicIO, this estimated time is used as the priority for scheduling I/O commands (longer times are assigned lower priority, while shorter times are assigned higher priority).
 
 The problem is that the interrupt handler is responsible for scheduling I/O commands in zicIO, requiring minimal time complexity. So simply using a multi-level queue was not suitable because lower-priority I/O commands must eventually be elevated to higher priorities over time by the interrupt handler to prevent starvation.
 
